@@ -1,0 +1,18 @@
+version: "3"
+services:
+  zabbix_agent:
+    network_mode: "host"
+    image: bakonyip/zabbix-agent-docker:ubuntu-latest
+    privileged: true
+    environment:
+      - ZBX_SERVER_HOST=<zabbix_server_ip>
+      - ZBX_HOSTNAME=<hostname>
+      - ZBX_ENABLEREMOTECOMMANDS=1
+    volumes:
+      - '/:/rootfs:ro'
+      - '/var/run:/var/run:ro'
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+      - '/etc/localtime:/etc/localtime:ro'
+    restart: always
+    ports:
+      - "10050:10050"
