@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>4.4</version>
+    <date>2020-04-06T19:10:29Z</date>
+    <groups>
+        <group>
+            <name>Linux servers</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <template>Template Syncthing Folder</template>
+            <name>Template Syncthing Folder</name>
+            <groups>
+                <group>
+                    <name>Linux servers</name>
+                </group>
+            </groups>
+            <applications>
+                <application>
+                    <name>Syncthing</name>
+                </application>
+            </applications>
+            <discovery_rules>
+                <discovery_rule>
+                    <name>Folder id discovery</name>
+                    <key>syncthing.folder.discovery</key>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>{#FOLDER_ID} folder error:</name>
+                            <key>syncthing.folder[{#FOLDER_ID}, folder_status_errors]</key>
+                            <applications>
+                                <application>
+                                    <name>Syncthing</name>
+                                </application>
+                            </applications>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{delta(120)}&gt;5</expression>
+                                    <name>{#FOLDER_ID} too many error count!</name>
+                                    <priority>AVERAGE</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>{#FOLDER_ID} folder global bytes:</name>
+                            <key>syncthing.folder[{#FOLDER_ID}, folder_status_globalBytes]</key>
+                            <applications>
+                                <application>
+                                    <name>Syncthing</name>
+                                </application>
+                            </applications>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>{#FOLDER_ID} folder global deleted:</name>
+                            <key>syncthing.folder[{#FOLDER_ID}, folder_status_globalDeleted]</key>
+                            <applications>
+                                <application>
+                                    <name>Syncthing</name>
+                                </application>
+                            </applications>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>{#FOLDER_ID} folder global directories:</name>
+                            <key>syncthing.folder[{#FOLDER_ID}, folder_status_globalDirectories]</key>
+                            <applications>
+                                <application>
+                                    <name>Syncthing</name>
+                                </application>
+                            </applications>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>{#FOLDER_ID} folder global files:</name>
+                            <key>syncthing.folder[{#FOLDER_ID}, folder_status_globalFiles]</key>
+                            <applications>
+                                <application>
+                                    <name>Syncthing</name>
+                                </application>
+                            </applications>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>{#FOLDER_ID} folder global total items:</name>
+                            <key>syncthing.folder[{#FOLDER_ID}, folder_status_globalTotalItems]</key>
+                            <applications>
+                                <application>
+                                    <name>Syncthing</name>
+                                </application>
+                            </applications>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>{#FOLDER_ID} folder local bytes:</name>
+                            <key>syncthing.folder[{#FOLDER_ID}, folder_status_localBytes]</key>
+                            <applications>
+                                <application>
+                                    <name>Syncthing</name>
+                                </application>
+                            </applications>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>{#FOLDER_ID} folder local deleted:</name>
+                            <key>syncthing.folder[{#FOLDER_ID}, folder_status_localDeleted]</key>
+                            <applications>
+                                <application>
+                                    <name>Syncthing</name>
+                                </application>
+                            </applications>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>{#FOLDER_ID} folder local directories:</name>
+                            <key>syncthing.folder[{#FOLDER_ID}, folder_status_localDirectories]</key>
+                            <applications>
+                                <application>
+                                    <name>Syncthing</name>
+                                </application>
+                            </applications>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>{#FOLDER_ID} folder local files:</name>
+                            <key>syncthing.folder[{#FOLDER_ID}, folder_status_localFiles]</key>
+                            <applications>
+                                <application>
+                                    <name>Syncthing</name>
+                                </application>
+                            </applications>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>{#FOLDER_ID} folder local total items:</name>
+                            <key>syncthing.folder[{#FOLDER_ID}, folder_status_localTotalItems]</key>
+                            <applications>
+                                <application>
+                                    <name>Syncthing</name>
+                                </application>
+                            </applications>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>{#FOLDER_ID} folder state changed:</name>
+                            <key>syncthing.folder[{#FOLDER_ID}, folder_status_stateChanged]</key>
+                            <trends>0</trends>
+                            <value_type>TEXT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Syncthing</name>
+                                </application>
+                            </applications>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>{#FOLDER_ID} folder state:</name>
+                            <key>syncthing.folder[{#FOLDER_ID}, folder_status_state]</key>
+                            <trends>0</trends>
+                            <value_type>TEXT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Syncthing</name>
+                                </application>
+                            </applications>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{last(#5)}&gt;3</expression>
+                                    <name>{#FOLDER_ID} no date recived from agent</name>
+                                    <priority>AVERAGE</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>{#FOLDER_ID} folder version:</name>
+                            <key>syncthing.folder[{#FOLDER_ID}, folder_status_version]</key>
+                            <applications>
+                                <application>
+                                    <name>Syncthing</name>
+                                </application>
+                            </applications>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>{#FOLDER_ID} folder last scan time:</name>
+                            <key>syncthing.folder[{#FOLDER_ID}, lastscan_time]</key>
+                            <trends>0</trends>
+                            <value_type>TEXT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Syncthing</name>
+                                </application>
+                            </applications>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>{#FOLDER_ID} folder last file:</name>
+                            <key>syncthing.folder[{#FOLDER_ID}, lastsync_file]</key>
+                            <trends>0</trends>
+                            <value_type>TEXT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Syncthing</name>
+                                </application>
+                            </applications>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>{#FOLDER_ID} folder last sync time:</name>
+                            <key>syncthing.folder[{#FOLDER_ID}, lastsync_time]</key>
+                            <trends>0</trends>
+                            <value_type>TEXT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Syncthing</name>
+                                </application>
+                            </applications>
+                        </item_prototype>
+                    </item_prototypes>
+                </discovery_rule>
+            </discovery_rules>
+        </template>
+    </templates>
+</zabbix_export>
