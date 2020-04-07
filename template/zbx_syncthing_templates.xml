@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>4.4</version>
-    <date>2020-04-06T19:10:29Z</date>
+    <date>2020-04-07T11:58:07Z</date>
     <groups>
         <group>
             <name>Linux servers</name>
@@ -23,8 +23,33 @@
             </applications>
             <discovery_rules>
                 <discovery_rule>
+                    <name>Device discovery</name>
+                    <key>syncthing.device.discovery</key>
+                    <delay>1h</delay>
+                    <item_prototypes>
+                        <item_prototype>
+                            <name>{#DEVICE_NAME} device last seen:</name>
+                            <key>syncthing.folder[{#DEVICE_ID}, device_last_seen]</key>
+                            <trends>0</trends>
+                            <value_type>TEXT</value_type>
+                            <applications>
+                                <application>
+                                    <name>Syncthing</name>
+                                </application>
+                            </applications>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{last(#5)}=0</expression>
+                                    <name>test</name>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                    </item_prototypes>
+                </discovery_rule>
+                <discovery_rule>
                     <name>Folder id discovery</name>
                     <key>syncthing.folder.discovery</key>
+                    <delay>1h</delay>
                     <item_prototypes>
                         <item_prototype>
                             <name>{#FOLDER_ID} folder error:</name>
@@ -153,13 +178,6 @@
                                     <name>Syncthing</name>
                                 </application>
                             </applications>
-                            <trigger_prototypes>
-                                <trigger_prototype>
-                                    <expression>{last(#5)}&gt;3</expression>
-                                    <name>{#FOLDER_ID} no date recived from agent</name>
-                                    <priority>AVERAGE</priority>
-                                </trigger_prototype>
-                            </trigger_prototypes>
                         </item_prototype>
                         <item_prototype>
                             <name>{#FOLDER_ID} folder version:</name>

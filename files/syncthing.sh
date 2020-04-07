@@ -167,6 +167,18 @@ if [ "$2" == "folder_status_version" ]; then
 fi
 }
 
+function device_last_seen() {
+if [ "$2" == "device_last_seen" ]; then
+
+    LAST_SYNC=`curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://$SYNCTHING_URL:8384/rest/stats/device | jq ".\"$1\".lastSeen" | sed -es/"^\"\([^\"]*\)\"$"/"\1"/`
+
+    LAST_SEC=`date -d "$LAST_SYNC" +"%Y-%m-%d %H:%M.%S"`
+
+    echo -n "$LAST_SEC"
+
+fi
+}
+
 lastsync_time $1 $2
 lastscan_time $1 $2
 lastsync_file $1 $2
@@ -184,3 +196,4 @@ folder_status_localTotalItems $1 $2
 folder_status_state $1 $2
 folder_status_stateChanged $1 $2
 folder_status_version $1 $2
+device_last_seen $1 $2
