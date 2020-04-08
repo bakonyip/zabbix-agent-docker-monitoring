@@ -14,7 +14,7 @@ if [ "$2" == "lastsync_time" ]; then
 
     LAST_SYNC=`curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://$SYNCTHING_URL:$SYNCTHING_PORT/rest/stats/folder | jq ".\"$1\".lastFile.at" | sed -es/"^\"\([^\"]*\)\"$"/"\1"/`
 
-    echo -n 'date -d "$LAST_SYNC" +"%Y-%m-%d %H:%M.%S"'
+    echo -n $(date -d "$LAST_SYNC" +"%Y-%m-%d %H:%M.%S")
 
 fi
 }
@@ -25,7 +25,7 @@ if [ "$2" == "lastscan_time" ]; then
 
     LAST_SCAN=`curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://$SYNCTHING_URL:$SYNCTHING_PORT/rest/stats/folder | jq ".\"$1\".lastScan" | sed -es/"^\"\([^\"]*\)\"$"/"\1"/`
 
-    echo -n 'date -d "$LAST_SCAN" +"%Y-%m-%d %H:%M.%S"'
+    echo -n $(date -d "$LAST_SCAN" +"%Y-%m-%d %H:%M.%S")
 
 fi
 
@@ -155,7 +155,7 @@ if [ "$2" == "folder_status_stateChanged" ]; then
 
     LAST_STATE=`curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://$SYNCTHING_URL:$SYNCTHING_PORT/rest/db/status?folder=$1 | jq ".stateChanged" | sed -es/"^\"\([^\"]*\)\"$"/"\1"/`
 
-    echo -n 'date -d "$LAST_STATE" +"%Y-%m-%d %H:%M.%S"'
+    echo -n $(date -d "$LAST_STATE" +"%Y-%m-%d %H:%M.%S")
 
 fi
 }
@@ -172,9 +172,9 @@ fi
 function device_last_seen() {
 if [ "$2" == "device_last_seen" ]; then
 
-    LAST_SYNC=`curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://$SYNCTHING_URL:$SYNCTHING_PORT/rest/stats/device | jq ".\"$1\".lastSeen" | sed -es/"^\"\([^\"]*\)\"$"/"\1"/`
+    LAST_SEEN=`curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://$SYNCTHING_URL:$SYNCTHING_PORT/rest/stats/device | jq ".\"$1\".lastSeen" | sed -es/"^\"\([^\"]*\)\"$"/"\1"/`
 
-    echo -n 'date -d "$LAST_SYNC" +"%Y-%m-%d %H:%M.%S"'
+    echo -n $(date -d "$LAST_SEEN" +"%Y-%m-%d %H:%M.%S")
 
 fi
 }
