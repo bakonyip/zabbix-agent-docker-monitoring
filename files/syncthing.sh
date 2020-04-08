@@ -1,14 +1,20 @@
 #!/bin/bash
 
+function set_variable() {
+
+    if [ -z ${SYNCTHING_API} ]; then echo "Syncthing api key is unset" && exit 1; fi
+    if [ -z ${SYNCTHING_URL} ]; then export SYNCTHING_URL=127.0.0.1; fi
+    if [ -z ${SYNCTHING_PORT} ]; then export SYNCTHING_PORT=8384; fi
+
+}
+
 function lastsync_time() {
 
 if [ "$2" == "lastsync_time" ]; then
 
-    LAST_SYNC=`curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://$SYNCTHING_URL:8384/rest/stats/folder | jq ".\"$1\".lastFile.at" | sed -es/"^\"\([^\"]*\)\"$"/"\1"/`
+    LAST_SYNC=`curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://$SYNCTHING_URL:$SYNCTHING_PORT/rest/stats/folder | jq ".\"$1\".lastFile.at" | sed -es/"^\"\([^\"]*\)\"$"/"\1"/`
 
-    LAST_SEC=`date -d "$LAST_SYNC" +"%Y-%m-%d %H:%M.%S"`
-
-    echo -n "$LAST_SEC"
+    echo -n 'date -d "$LAST_SYNC" +"%Y-%m-%d %H:%M.%S"'
 
 fi
 }
@@ -17,11 +23,9 @@ function lastscan_time() {
 
 if [ "$2" == "lastscan_time" ]; then
 
-    LAST_SCAN=`curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://$SYNCTHING_URL:8384/rest/stats/folder | jq ".\"$1\".lastScan" | sed -es/"^\"\([^\"]*\)\"$"/"\1"/`
+    LAST_SCAN=`curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://$SYNCTHING_URL:$SYNCTHING_PORT/rest/stats/folder | jq ".\"$1\".lastScan" | sed -es/"^\"\([^\"]*\)\"$"/"\1"/`
 
-    LAST_SEC=`date -d "$LAST_SCAN" +"%Y-%m-%d %H:%M.%S"`
-
-    echo -n "$LAST_SEC"
+    echo -n 'date -d "$LAST_SCAN" +"%Y-%m-%d %H:%M.%S"'
 
 fi
 
@@ -31,7 +35,7 @@ function lastsync_file() {
 
 if [ "$2" == "lastsync_file" ]; then
 
-    curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://192.168.1.109:8384/rest/stats/folder | jq ".\"$1\".lastFile.filename" | sed -es/"^\"\([^\"]*\)\"$"/"\1"/
+    curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://$SYNCTHING_URL:$SYNCTHING_PORT/rest/stats/folder | jq ".\"$1\".lastFile.filename" | sed -es/"^\"\([^\"]*\)\"$"/"\1"/
 
 fi
 
@@ -41,7 +45,7 @@ function folder_status_errors() {
 
 if [ "$2" == "folder_status_errors" ]; then
 
-    curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://192.168.1.109:8384/rest/db/status?folder=$1 | jq ".errors"
+    curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://$SYNCTHING_URL:$SYNCTHING_PORT/rest/db/status?folder=$1 | jq ".errors"
 
 fi
 }
@@ -50,7 +54,7 @@ function folder_status_globalBytes() {
 
 if [ "$2" == "folder_status_globalBytes" ]; then
 
-    curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://192.168.1.109:8384/rest/db/status?folder=$1 | jq ".globalBytes"
+    curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://$SYNCTHING_URL:$SYNCTHING_PORT/rest/db/status?folder=$1 | jq ".globalBytes"
 
 fi
 }
@@ -59,7 +63,7 @@ function folder_status_globalDeleted() {
 
 if [ "$2" == "folder_status_globalDeleted" ]; then
 
-    curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://192.168.1.109:8384/rest/db/status?folder=$1 | jq ".globalDeleted"
+    curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://$SYNCTHING_URL:$SYNCTHING_PORT/rest/db/status?folder=$1 | jq ".globalDeleted"
 
 fi
 }
@@ -68,7 +72,7 @@ function folder_status_globalDirectories() {
 
 if [ "$2" == "folder_status_globalDirectories" ]; then
 
-    curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://192.168.1.109:8384/rest/db/status?folder=$1 | jq ".globalDirectories"
+    curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://$SYNCTHING_URL:$SYNCTHING_PORT/rest/db/status?folder=$1 | jq ".globalDirectories"
 
 fi
 }
@@ -77,7 +81,7 @@ function folder_status_globalFiles() {
 
 if [ "$2" == "folder_status_globalFiles" ]; then
 
-    curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://192.168.1.109:8384/rest/db/status?folder=$1 | jq ".globalFiles"
+    curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://$SYNCTHING_URL:$SYNCTHING_PORT/rest/db/status?folder=$1 | jq ".globalFiles"
 
 fi
 }
@@ -86,7 +90,7 @@ function folder_status_globalTotalItems() {
 
 if [ "$2" == "folder_status_globalTotalItems" ]; then
 
-    curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://192.168.1.109:8384/rest/db/status?folder=$1 | jq ".globalTotalItems"
+    curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://$SYNCTHING_URL:$SYNCTHING_PORT/rest/db/status?folder=$1 | jq ".globalTotalItems"
 
 fi
 }
@@ -95,7 +99,7 @@ function folder_status_localBytes() {
 
 if [ "$2" == "folder_status_localBytes" ]; then
 
-    curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://192.168.1.109:8384/rest/db/status?folder=$1 | jq ".localBytes"
+    curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://$SYNCTHING_URL:$SYNCTHING_PORT/rest/db/status?folder=$1 | jq ".localBytes"
 
 fi
 }
@@ -104,7 +108,7 @@ function folder_status_localDeleted() {
 
 if [ "$2" == "folder_status_localDeleted" ]; then
 
-    curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://192.168.1.109:8384/rest/db/status?folder=$1 | jq ".localDeleted"
+    curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://$SYNCTHING_URL:$SYNCTHING_PORT/rest/db/status?folder=$1 | jq ".localDeleted"
 
 fi
 }
@@ -113,7 +117,7 @@ function folder_status_localDirectories() {
 
 if [ "$2" == "folder_status_localDirectories" ]; then
 
-    curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://192.168.1.109:8384/rest/db/status?folder=$1 | jq ".localDirectories"
+    curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://$SYNCTHING_URL:$SYNCTHING_PORT/rest/db/status?folder=$1 | jq ".localDirectories"
 
 fi
 }
@@ -122,7 +126,7 @@ function folder_status_localFiles() {
 
 if [ "$2" == "folder_status_localFiles" ]; then
 
-    curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://192.168.1.109:8384/rest/db/status?folder=$1 | jq ".localFiles"
+    curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://$SYNCTHING_URL:$SYNCTHING_PORT/rest/db/status?folder=$1 | jq ".localFiles"
 
 fi
 }
@@ -131,7 +135,7 @@ function folder_status_localTotalItems() {
 
 if [ "$2" == "folder_status_localTotalItems" ]; then
 
-    curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://192.168.1.109:8384/rest/db/status?folder=$1 | jq ".localTotalItems"
+    curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://$SYNCTHING_URL:$SYNCTHING_PORT/rest/db/status?folder=$1 | jq ".localTotalItems"
 
 fi
 }
@@ -140,7 +144,7 @@ function folder_status_state() {
 
 if [ "$2" == "folder_status_state" ]; then
 
-    curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://192.168.1.109:8384/rest/db/status?folder=$1 | jq ".state"
+    curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://$SYNCTHING_URL:$SYNCTHING_PORT/rest/db/status?folder=$1 | jq ".state"
 
 fi
 }
@@ -149,11 +153,9 @@ function folder_status_stateChanged() {
 
 if [ "$2" == "folder_status_stateChanged" ]; then
 
-    LAST_STATE=`curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://192.168.1.109:8384/rest/db/status?folder=$1 | jq ".stateChanged" | sed -es/"^\"\([^\"]*\)\"$"/"\1"/`
+    LAST_STATE=`curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://$SYNCTHING_URL:$SYNCTHING_PORT/rest/db/status?folder=$1 | jq ".stateChanged" | sed -es/"^\"\([^\"]*\)\"$"/"\1"/`
 
-    LAST_SEC=`date -d "$LAST_STATE" +"%Y-%m-%d %H:%M.%S"`
-
-    echo -n "$LAST_SEC"
+    echo -n 'date -d "$LAST_STATE" +"%Y-%m-%d %H:%M.%S"'
 
 fi
 }
@@ -162,7 +164,7 @@ function folder_status_version() {
 
 if [ "$2" == "folder_status_version" ]; then
 
-    curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://192.168.1.109:8384/rest/db/status?folder=$1 | jq ".version"
+    curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://$SYNCTHING_URL:$SYNCTHING_PORT/rest/db/status?folder=$1 | jq ".version"
 
 fi
 }
@@ -170,15 +172,14 @@ fi
 function device_last_seen() {
 if [ "$2" == "device_last_seen" ]; then
 
-    LAST_SYNC=`curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://$SYNCTHING_URL:8384/rest/stats/device | jq ".\"$1\".lastSeen" | sed -es/"^\"\([^\"]*\)\"$"/"\1"/`
+    LAST_SYNC=`curl -s -X GET -H "X-API-Key: $SYNCTHING_API" http://$SYNCTHING_URL:$SYNCTHING_PORT/rest/stats/device | jq ".\"$1\".lastSeen" | sed -es/"^\"\([^\"]*\)\"$"/"\1"/`
 
-    LAST_SEC=`date -d "$LAST_SYNC" +"%Y-%m-%d %H:%M.%S"`
-
-    echo -n "$LAST_SEC"
+    echo -n 'date -d "$LAST_SYNC" +"%Y-%m-%d %H:%M.%S"'
 
 fi
 }
 
+set_variable
 lastsync_time $1 $2
 lastscan_time $1 $2
 lastsync_file $1 $2
