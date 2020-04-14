@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>4.4</version>
-    <date>2020-04-14T11:03:41Z</date>
+    <date>2020-04-14T11:14:04Z</date>
     <groups>
         <group>
             <name>Linux servers</name>
@@ -201,7 +201,7 @@
                                     <priority>AVERAGE</priority>
                                 </trigger_prototype>
                                 <trigger_prototype>
-                                    <expression>{fuzzytime(120)}=0</expression>
+                                    <expression>{fuzzytime(3800)}=0</expression>
                                     <name>{#FOLDER_ID} folder not available on {HOST.NAME} Syncthing.</name>
                                     <priority>AVERAGE</priority>
                                 </trigger_prototype>
