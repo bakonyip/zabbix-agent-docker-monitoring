@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>4.4</version>
-    <date>2020-04-07T11:58:07Z</date>
+    <date>2020-04-14T10:57:49Z</date>
     <groups>
         <group>
             <name>Linux servers</name>
@@ -9,8 +9,8 @@
     </groups>
     <templates>
         <template>
-            <template>Template Syncthing Folder</template>
-            <name>Template Syncthing Folder</name>
+            <template>Template Syncthing</template>
+            <name>Template Syncthing</name>
             <groups>
                 <group>
                     <name>Linux servers</name>
@@ -30,8 +30,7 @@
                         <item_prototype>
                             <name>{#DEVICE_NAME} device last seen:</name>
                             <key>syncthing.folder[{#DEVICE_ID}, device_last_seen]</key>
-                            <trends>0</trends>
-                            <value_type>TEXT</value_type>
+                            <units>unixtime</units>
                             <applications>
                                 <application>
                                     <name>Syncthing</name>
@@ -39,8 +38,14 @@
                             </applications>
                             <trigger_prototypes>
                                 <trigger_prototype>
-                                    <expression>{last(#5)}=0</expression>
-                                    <name>test</name>
+                                    <expression>{nodata(120)}=1</expression>
+                                    <name>{#DEVICE_NAME} device no data received from {HOST.NAME} Syncthing</name>
+                                    <priority>AVERAGE</priority>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <expression>{fuzzytime(120)}=0</expression>
+                                    <name>{#DEVICE_NAME} device not available on {HOST.NAME} Syncthing</name>
+                                    <priority>AVERAGE</priority>
                                 </trigger_prototype>
                             </trigger_prototypes>
                         </item_prototype>
@@ -61,8 +66,8 @@
                             </applications>
                             <trigger_prototypes>
                                 <trigger_prototype>
-                                    <expression>{delta(120)}&gt;5</expression>
-                                    <name>{#FOLDER_ID} too many error count!</name>
+                                    <expression>{nodata(120)}=1</expression>
+                                    <name>{#FOLDER_ID} folder no data received from {HOST.NAME} Syncthing</name>
                                     <priority>AVERAGE</priority>
                                 </trigger_prototype>
                             </trigger_prototypes>
@@ -160,8 +165,7 @@
                         <item_prototype>
                             <name>{#FOLDER_ID} folder state changed:</name>
                             <key>syncthing.folder[{#FOLDER_ID}, folder_status_stateChanged]</key>
-                            <trends>0</trends>
-                            <value_type>TEXT</value_type>
+                            <units>unixtime</units>
                             <applications>
                                 <application>
                                     <name>Syncthing</name>
@@ -178,6 +182,14 @@
                                     <name>Syncthing</name>
                                 </application>
                             </applications>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{diff()}=1 and&#13;
+{strlen(120)}&lt;&gt;0</expression>
+                                    <name>{#FOLDER_ID} folder status changed on {HOST.NAME} Syncthing.</name>
+                                    <priority>AVERAGE</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
                         </item_prototype>
                         <item_prototype>
                             <name>{#FOLDER_ID} folder version:</name>
@@ -189,10 +201,9 @@
                             </applications>
                         </item_prototype>
                         <item_prototype>
-                            <name>{#FOLDER_ID} folder last scan time:</name>
+                            <name>{#FOLDER_ID} folder last scan:</name>
                             <key>syncthing.folder[{#FOLDER_ID}, lastscan_time]</key>
-                            <trends>0</trends>
-                            <value_type>TEXT</value_type>
+                            <units>unixtime</units>
                             <applications>
                                 <application>
                                     <name>Syncthing</name>
@@ -211,10 +222,9 @@
                             </applications>
                         </item_prototype>
                         <item_prototype>
-                            <name>{#FOLDER_ID} folder last sync time:</name>
+                            <name>{#FOLDER_ID} folder last sync:</name>
                             <key>syncthing.folder[{#FOLDER_ID}, lastsync_time]</key>
-                            <trends>0</trends>
-                            <value_type>TEXT</value_type>
+                            <units>unixtime</units>
                             <applications>
                                 <application>
                                     <name>Syncthing</name>
