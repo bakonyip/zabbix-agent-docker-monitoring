@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>4.4</version>
-    <date>2020-04-14T10:57:49Z</date>
+    <date>2020-04-14T11:03:41Z</date>
     <groups>
         <group>
             <name>Linux servers</name>
@@ -64,13 +64,6 @@
                                     <name>Syncthing</name>
                                 </application>
                             </applications>
-                            <trigger_prototypes>
-                                <trigger_prototype>
-                                    <expression>{nodata(120)}=1</expression>
-                                    <name>{#FOLDER_ID} folder no data received from {HOST.NAME} Syncthing</name>
-                                    <priority>AVERAGE</priority>
-                                </trigger_prototype>
-                            </trigger_prototypes>
                         </item_prototype>
                         <item_prototype>
                             <name>{#FOLDER_ID} folder global bytes:</name>
@@ -182,14 +175,6 @@
                                     <name>Syncthing</name>
                                 </application>
                             </applications>
-                            <trigger_prototypes>
-                                <trigger_prototype>
-                                    <expression>{diff()}=1 and&#13;
-{strlen(120)}&lt;&gt;0</expression>
-                                    <name>{#FOLDER_ID} folder status changed on {HOST.NAME} Syncthing.</name>
-                                    <priority>AVERAGE</priority>
-                                </trigger_prototype>
-                            </trigger_prototypes>
                         </item_prototype>
                         <item_prototype>
                             <name>{#FOLDER_ID} folder version:</name>
@@ -209,6 +194,18 @@
                                     <name>Syncthing</name>
                                 </application>
                             </applications>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <expression>{nodata(120)}=1</expression>
+                                    <name>{#FOLDER_ID} folder no data received from {HOST.NAME} Syncthing</name>
+                                    <priority>AVERAGE</priority>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <expression>{fuzzytime(120)}=0</expression>
+                                    <name>{#FOLDER_ID} folder not available on {HOST.NAME} Syncthing.</name>
+                                    <priority>AVERAGE</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
                         </item_prototype>
                         <item_prototype>
                             <name>{#FOLDER_ID} folder last file:</name>
